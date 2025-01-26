@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe6f2;
+            overflow: hidden;
+            color: #ff6fa6;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 3px solid #ffb3c6;
+            border-radius: 25px;
+            background-color: #fff4f8;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #ff5e9e;
+            font-size: 2em;
+            margin-bottom: 1em;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.6);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0px 4px 8px rgba(255, 105, 180, 0.4);
+        }
+
+        #yesButton {
+            background-color: #ff85c0;
+        }
+
+        #yesButton:hover {
+            background-color: #ff6fa6;
+            box-shadow: 0px 6px 12px rgba(255, 105, 180, 0.6);
+        }
+
+        #noButton {
+            background-color: #ffb3c6;
+        }
+
+        #noButton:hover {
+            background-color: #ff99b5;
+            box-shadow: 0px 6px 12px rgba(255, 182, 193, 0.5);
+        }
+
+        /* Upload Button */
+        .upload-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .upload-container input[type="file"] {
+            display: none;
+        }
+
+        .upload-container label {
+            background-color: #ff85c0;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(255, 105, 180, 0.5);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .upload-container label:hover {
+            background-color: #ff6fa6;
+            box-shadow: 0px 6px 12px rgba(255, 105, 180, 0.7);
+        }
+
+        /* Thêm viền cute cho ảnh */
+        .popup-img {
+            position: absolute;
+            width: 80px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: transform 1s ease, top 1s ease, left 1s ease;
+            border-radius: 15px;
+            /* Viền bo tròn cho ảnh */
+            border: 3px solid #ff85c0;
+            /* Màu viền nhẹ nhàng */
+            box-shadow: 0px 4px 8px rgba(255, 105, 180, 0.5);
+            /* Hiệu ứng đổ bóng nhẹ */
+        }
+
+        .show {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+
+        /* Đảm bảo ảnh tải lên cũng có viền đẹp */
+        .upload-container input[type="file"] {
+            display: none;
+        }
+
+        .upload-container label {
+            background-color: #ff85c0;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(255, 105, 180, 0.5);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border-radius: 20px;
+        }
+
+        .upload-container label:hover {
+            background-color: #ff6fa6;
+            box-shadow: 0px 6px 12px rgba(255, 105, 180, 0.7);
+        }
+
+
+        /* Cute heart message */
+        #heartMessage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            color: #ff5e9e;
+            font-size: 1.5em;
+            text-shadow: 1px 1px 2px rgba(255, 105, 180, 0.5);
+        }
+
+        #heartMessage.show-heart {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container with title and buttons -->
+    <div class="container">
+        <h1>Bấm No để từ chối ❤️</h1>
+        <div class="buttons">
+            <button id="yesButton">Yes</button>
+            <button id="noButton">No</button>
+        </div>
+    </div>
+
+    <!-- Floating heart message -->
+    <div id="heartMessage" class="hidden">
+        ❤️ Em chọn đúng rồi đó! ❤️
+    </div>
+
+    <!-- Image Upload Section -->
+    <div class="upload-container">
+        <label for="imageUpload">Chọn ảnh của bạn</label>
+        <input type="file" id="imageUpload" multiple accept="image/*">
+    </div>
+
+    <!-- Default pop-up images -->
+    <img src="1.jpg" class="popup-img hidden" id="img1" />
+    <img src="2.jpg" class="popup-img hidden" id="img2" />
+    <img src="3.png" class="popup-img hidden" id="img3" />
+    <img src="4.png" class="popup-img hidden" id="img4" />
+    <img src="5.jpg" class="popup-img hidden" id="img5" />
+    <img src="6.jpg" class="popup-img hidden" id="img6" />
+
+    <script>
+        const noButton = document.getElementById('noButton');
+        const yesButton = document.getElementById('yesButton');
+        const heartMessage = document.getElementById('heartMessage');
+        const container = document.querySelector('.container');
+        const imageUpload = document.getElementById('imageUpload');
+
+        // Moving "No" button randomly when hovered
+        function moveButton() {
+            const containerRect = container.getBoundingClientRect();
+            const buttonRect = noButton.getBoundingClientRect();
+            const maxX = containerRect.width - buttonRect.width;
+            const maxY = containerRect.height - buttonRect.height;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            noButton.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        noButton.addEventListener('mouseover', moveButton);
+        noButton.addEventListener('touchstart', moveButton);
+
+        // Show heart message and images when "Yes" is clicked
+        yesButton.addEventListener('click', () => {
+            heartMessage.classList.add('show-heart');
+            for (let i = 1; i <= 6; i++) {
+                const img = document.getElementById(`img${i}`);
+                img.classList.remove('hidden');
+                img.style.left = `${Math.random() * 80}vw`;
+                img.style.top = `${Math.random() * 50}vh`;
+                setTimeout(() => {
+                    img.classList.add('show');
+                }, i * 200);
+            }
+        });
+
+        // Handle image upload and show uploaded images with effect
+        imageUpload.addEventListener('change', (event) => {
+            const files = event.target.files;
+            Array.from(files).forEach((file) => {
+                const imgElement = document.createElement('img');
+                imgElement.classList.add('popup-img');
+                imgElement.src = URL.createObjectURL(file);
+
+                // Set random position for the uploaded image
+                imgElement.style.left = `${Math.random() * 80}vw`;
+                imgElement.style.top = `${Math.random() * 50}vh`;
+
+                // Append to body and show with effect
+                document.body.appendChild(imgElement);
+
+                // Apply effect after a short delay
+                setTimeout(() => {
+                    imgElement.classList.add('show');
+                }, 100);
+
+                // Clean up the URL object after the image loads
+                imgElement.onload = () => URL.revokeObjectURL(imgElement.src);
+            });
+        });
+
+        // Function to make images move to random positions on tap/click
+        function moveImages() {
+            const images = document.querySelectorAll('.popup-img');
+            images.forEach(img => {
+                img.style.left = `${Math.random() * 80}vw`;
+                img.style.top = `${Math.random() * 50}vh`;
+            });
+        }
+
+        // Add event listener for screen tap (for both mobile and desktop)
+        document.addEventListener('click', moveImages);
+        document.addEventListener('touchstart', moveImages);
+    </script>
+</body>
