@@ -76,3 +76,12 @@ function mouseReleased() {
     };
     fireworks.push(new Firework(target));
 }
+
+
+function setup() {
+    createCanvas(windowWidth, windowHeight); // Tạo canvas với kích thước phù hợp màn hình
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight); // Điều chỉnh canvas khi người dùng xoay màn hình
+}
